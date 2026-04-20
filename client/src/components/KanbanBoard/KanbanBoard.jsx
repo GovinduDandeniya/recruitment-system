@@ -3,7 +3,7 @@ import styles from './KanbanBoard.module.css'
 
 const STAGES = ['Applying Period', 'Screening', 'Interview', 'Test']
 
-function KanbanBoard({ candidates = [], onMoveCandidate }) {
+function KanbanBoard({ candidates = [], onMoveCandidate, onCardClick }) {
   const grouped = STAGES.reduce((acc, stage) => {
     acc[stage] = candidates.filter((c) => c.stage === stage)
     return acc
@@ -17,6 +17,7 @@ function KanbanBoard({ candidates = [], onMoveCandidate }) {
           stage={stage}
           candidates={grouped[stage]}
           onMoveCandidate={onMoveCandidate}
+          onCardClick={onCardClick}
         />
       ))}
     </div>

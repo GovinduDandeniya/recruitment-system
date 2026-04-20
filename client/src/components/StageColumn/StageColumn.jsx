@@ -1,3 +1,4 @@
+import CandidateCard from '../CandidateCard/CandidateCard'
 import styles from './StageColumn.module.css'
 
 const STAGE_COLORS = {
@@ -7,7 +8,7 @@ const STAGE_COLORS = {
   'Test': 'test',
 }
 
-function StageColumn({ stage, candidates = [], children, onMoveCandidate }) {
+function StageColumn({ stage, candidates = [], onMoveCandidate, onCardClick }) {
   const colorKey = STAGE_COLORS[stage] || 'applying'
 
   return (
@@ -22,7 +23,9 @@ function StageColumn({ stage, candidates = [], children, onMoveCandidate }) {
       </div>
 
       <div className={styles.cards}>
-        {children}
+        {candidates.map((c) => (
+          <CandidateCard key={c.id} candidate={c} onClick={onCardClick} />
+        ))}
       </div>
     </div>
   )
