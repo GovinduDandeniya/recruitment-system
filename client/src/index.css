@@ -1,0 +1,67 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg: #f5f6fa;
+  --color-white: #ffffff;
+  --color-border: #e8eaed;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+
+  --color-brand: #1a1a2e;
+  --color-brand-light: #2d2d4e;
+
+  --color-stage-applying: #f97316;
+  --color-stage-screening: #a855f7;
+  --color-stage-interview: #3b82f6;
+  --color-stage-test: #14b8a6;
+
+  --color-star: #f59e0b;
+  --color-referred: #10b981;
+
+  --sidebar-width: 56px;
+  --topnav-height: 52px;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.08);
+  --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.18);
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+input, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
