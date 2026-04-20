@@ -1,10 +1,51 @@
 const store = require('../data/candidates');
-const { createCandidate } = require('../models/candidate');
+const { createCandidate, STAGES } = require('../models/candidate');
 
-/** GET /api/candidates */
+/**
+ * GET /api/candidates
+ * Query params:
+ *   stage    - filter by stage name (e.g. "Screening")
+ *   sort     - field to sort by: name | appliedAt | score (default: appliedAt)
+ *   order    - asc | desc (default: desc)
+ *   page     - page number, 1-based (default: 1)
+ *   limit    - items per page (default: 50, max: 100)
+ */
 function getAllCandidates(req, res) {
-  const candidates = store.getAll();
-  res.json({ data: candidates, total: candidates.length });
+  const { stage, sort = 'appliedAt', order = 'desc', page = '1', limit = '50' } = req.query;
+
+  // Filter
+  let candidates = store.getAll();
+  if (stage) {
+    if (!STAGES.includes(stage)) {
+      return res.status(400).json({ error: `Invalid stage. Must be one of: ${STAGES.join(', ')}` });
+    }
+    candidates = candidates.filter((c) => c.stage === stage);
+  }
+
+  // Sort
+  const allowedSorts = ['name', 'appliedAt', 'score'];
+  const sortField = allowedSorts.includes(sort) ? sort : 'appliedAt';
+  const sortDir = order === 'asc' ? 1 : -1;
+  candidates.sort((a, b) => {
+    const aVal = a[sortField] ?? '';
+    const bVal = b[sortField] ?? '';
+    if (aVal < bVal) return -1 * sortDir;
+    if (aVal > bVal) return 1 * sortDir;
+    return 0;
+  });
+
+  // Pagination
+  const pageNum = Math.max(1, parseInt(page, 10) || 1);
+  const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10) || 50));
+  const total = candidates.length;
+  const totalPages = Math.ceil(total / limitNum);
+  const start = (pageNum - 1) * limitNum;
+  const paginated = candidates.slice(start, start + limitNum);
+
+  res.json({
+    data: paginated,
+    meta: { total, page: pageNum, limit: limitNum, totalPages },
+  });
 }
 
 /** GET /api/candidates/:id */
@@ -57,10 +98,29 @@ function deleteCandidate(req, res) {
   res.status(204).send();
 }
 
+/**
+ * PATCH /api/candidates/:id/stage
+ * Body: { stage: "Interview" }
+ * Moves a candidate to a new stage (drag-and-drop support).
+ */
+function updateStage(req, res) {
+  const { stage } = req.body;
+  if (!stage || !STAGES.includes(stage)) {
+    return res.status(400).json({ error: `stage must be one of: ${STAGES.join(', ')}` });
+  }
+  const existing = store.getById(req.params.id);
+  if (!existing) {
+    return res.status(404).json({ error: 'Candidate not found' });
+  }
+  const updated = store.update(req.params.id, { stage });
+  res.json({ data: updated });
+}
+
 module.exports = {
   getAllCandidates,
   getCandidateById,
   createCandidateHandler,
   updateCandidate,
   deleteCandidate,
+  updateStage,
 };
