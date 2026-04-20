@@ -1,0 +1,21 @@
+.board {
+  display: flex;
+  gap: 16px;
+  padding: 20px 24px;
+  overflow-x: auto;
+  align-items: flex-start;
+  min-height: calc(100vh - var(--topnav-height) - 160px);
+}
+
+.board::-webkit-scrollbar {
+  height: 6px;
+}
+
+.board::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.board::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
