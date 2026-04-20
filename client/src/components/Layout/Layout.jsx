@@ -1,4 +1,5 @@
 import styles from './Layout.module.css'
+import TopNav from '../TopNav/TopNav'
 
 function Layout({ children }) {
   return (
@@ -24,6 +25,7 @@ function Layout({ children }) {
         </nav>
       </aside>
       <div className={styles.body}>
+        <TopNav />
         <main className={styles.main}>{children}</main>
       </div>
     </div>

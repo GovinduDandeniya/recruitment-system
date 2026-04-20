@@ -1,0 +1,139 @@
+.wrapper {
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 24px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 0 10px;
+  flex-wrap: wrap;
+}
+
+.backBtn,
+.chevron,
+.navArrow,
+.moreBtn {
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+}
+
+.backBtn:hover,
+.chevron:hover,
+.navArrow:hover,
+.moreBtn:hover {
+  background-color: var(--color-bg);
+}
+
+.jobTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+.pageCount {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.shareBtn {
+  background-color: #1a7a4a;
+  color: var(--color-white);
+  padding: 7px 16px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+
+.shareBtn:hover {
+  background-color: #15623c;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.open {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.dot {
+  color: var(--color-text-muted);
+}
+
+.meta {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover {
+  color: var(--color-text-primary);
+}
+
+.tabActive {
+  color: var(--color-text-primary);
+  border-bottom-color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.tabBadge {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 1px 6px;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
