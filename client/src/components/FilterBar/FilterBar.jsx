@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import styles from './FilterBar.module.css'
 
 const SCORE_OPTIONS = ['Any', '1+', '2+', '3+', '4+', '5']
@@ -6,8 +6,20 @@ const SCORE_OPTIONS = ['Any', '1+', '2+', '3+', '4+', '5']
 function FilterBar({ onSearch, onScoreFilter, onSortChange }) {
   const [search, setSearch] = useState('')
   const [scoreRange, setScoreRange] = useState('Any')
+  const [scoreOpen, setScoreOpen] = useState(false)
   const [sort, setSort] = useState('appliedAt')
   const [view, setView] = useState('kanban')
+  const scoreRef = useRef(null)
+
+  useEffect(() => {
+    function handleOutside(e) {
+      if (scoreRef.current && !scoreRef.current.contains(e.target)) {
+        setScoreOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleOutside)
+    return () => document.removeEventListener('mousedown', handleOutside)
+  }, [])
 
   function handleSearch(e) {
     setSearch(e.target.value)
@@ -16,6 +28,7 @@ function FilterBar({ onSearch, onScoreFilter, onSortChange }) {
 
   function handleScore(val) {
     setScoreRange(val)
+    setScoreOpen(false)
     onScoreFilter && onScoreFilter(val)
   }
 
@@ -43,20 +56,26 @@ function FilterBar({ onSearch, onScoreFilter, onSortChange }) {
           <span className={styles.arrow}>▾</span>
         </div>
 
-        <div className={styles.dropdown}>
-          <span>⭐ Score Range</span>
-          <span className={styles.arrow}>▾</span>
-          <div className={styles.dropdownMenu}>
-            {SCORE_OPTIONS.map((opt) => (
-              <button
-                key={opt}
-                className={`${styles.dropdownItem} ${scoreRange === opt ? styles.dropdownItemActive : ''}`}
-                onClick={() => handleScore(opt)}
-              >
-                {opt}
-              </button>
-            ))}
-          </div>
+        <div
+          className={`${styles.dropdown} ${scoreOpen ? styles.dropdownOpen : ''}`}
+          ref={scoreRef}
+          onClick={() => setScoreOpen((o) => !o)}
+        >
+          <span>⭐ {scoreRange === 'Any' ? 'Score Range' : `Score ≥ ${scoreRange.replace('+', '')}`}</span>
+          <span className={styles.arrow}>{scoreOpen ? '▴' : '▾'}</span>
+          {scoreOpen && (
+            <div className={styles.dropdownMenu}>
+              {SCORE_OPTIONS.map((opt) => (
+                <button
+                  key={opt}
+                  className={`${styles.dropdownItem} ${scoreRange === opt ? styles.dropdownItemActive : ''}`}
+                  onClick={(e) => { e.stopPropagation(); handleScore(opt) }}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className={styles.dropdown}>

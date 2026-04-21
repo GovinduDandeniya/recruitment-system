@@ -74,12 +74,7 @@ function CandidateModal({ candidate, onClose, onMoveStage, onDelete }) {
               <button
                 key={s}
                 className={`${styles.stageBtn} ${s === stage ? styles.stageBtnActive : ''}`}
-                onClick={() => {
-                  if (s !== stage) {
-                    onMoveStage(id, s)
-                    onClose()
-                  }
-                }}
+                onClick={() => s !== stage && onMoveStage(id, s)}
                 disabled={s === stage}
               >
                 {s}
@@ -91,10 +86,7 @@ function CandidateModal({ candidate, onClose, onMoveStage, onDelete }) {
         <div className={styles.actions}>
           <button
             className={styles.deleteBtn}
-            onClick={() => {
-              onDelete(id)
-              onClose()
-            }}
+            onClick={() => onDelete(id)}
           >
             Delete Candidate
           </button>

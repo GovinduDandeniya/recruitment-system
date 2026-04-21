@@ -70,8 +70,8 @@
   border-color: #9ca3af;
 }
 
-.dropdown:hover .dropdownMenu {
-  display: flex;
+.dropdownOpen {
+  border-color: #6c63ff;
 }
 
 .arrow {
@@ -80,7 +80,7 @@
 }
 
 .dropdownMenu {
-  display: none;
+  display: flex;
   flex-direction: column;
   position: absolute;
   top: calc(100% + 4px);
@@ -90,7 +90,7 @@
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-modal);
   z-index: 200;
-  min-width: 110px;
+  min-width: 130px;
   overflow: hidden;
 }
 
