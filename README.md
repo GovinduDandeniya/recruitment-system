@@ -135,3 +135,5 @@ npm run dev:client
 
 Built as part of the ZeloraTech Software Engineer Intern technical assessment.
 
+**GitHub Repository:** https://github.com/GovinduDandeniya/recruitment-system
+
