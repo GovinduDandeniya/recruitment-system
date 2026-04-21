@@ -170,3 +170,16 @@
   outline: none;
   cursor: pointer;
 }
+
+@media (max-width: 768px) {
+  .bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px 16px;
+  }
+
+  .left, .right {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

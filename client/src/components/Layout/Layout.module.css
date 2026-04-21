@@ -79,3 +79,13 @@
   display: flex;
   flex-direction: column;
 }
+
+@media (max-width: 640px) {
+  .sidebar {
+    display: none;
+  }
+
+  .body {
+    margin-left: 0;
+  }
+}

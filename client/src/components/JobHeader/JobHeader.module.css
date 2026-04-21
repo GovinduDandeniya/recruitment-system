@@ -137,3 +137,20 @@
   font-size: 11px;
   color: var(--color-text-secondary);
 }
+
+@media (max-width: 768px) {
+  .tabsRow {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .titleRow {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .metaRow {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
