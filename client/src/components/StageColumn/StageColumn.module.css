@@ -41,11 +41,21 @@
   color: var(--color-text-secondary);
   padding: 3px 8px;
   border-radius: var(--radius-sm);
-  transition: background 0.15s;
+  transition: background 0.15s, color 0.15s;
 }
 
 .detailBtn:hover {
   background-color: var(--color-border);
+}
+
+.detailBtnActive {
+  background-color: #f5f3ff;
+  color: #6c63ff;
+  font-weight: 600;
+}
+
+.detailBtnActive:hover {
+  background-color: #ede9fe;
 }
 
 .cards {
@@ -53,3 +63,26 @@
   flex-direction: column;
   gap: 10px;
 }
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  gap: 8px;
+}
+
+.emptyIcon {
+  font-size: 24px;
+  opacity: 0.5;
+}
+
+.emptyText {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+

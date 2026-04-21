@@ -15,8 +15,9 @@ async function request(path, options = {}) {
 
 export const candidatesApi = {
   getAll(params = {}) {
+    const merged = { limit: 100, ...params }
     const qs = new URLSearchParams(
-      Object.entries(params).filter(([, v]) => v !== '' && v !== null && v !== undefined)
+      Object.entries(merged).filter(([, v]) => v !== '' && v !== null && v !== undefined)
     ).toString()
     return request(`/candidates${qs ? `?${qs}` : ''}`)
   },

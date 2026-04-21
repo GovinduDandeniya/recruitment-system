@@ -1,4 +1,7 @@
+import { useState, useRef, useEffect } from 'react'
 import styles from './CandidateCard.module.css'
+
+const STAGES = ['Applying Period', 'Screening', 'Interview', 'Test']
 
 function StarRating({ score }) {
   if (score === null || score === undefined) return null
@@ -43,8 +46,54 @@ function formatDate(dateStr) {
   return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
 }
 
-function CandidateCard({ candidate, onClick }) {
+function CardMenu({ candidate, onClose, onAddAssessment }) {
+  const { id, stage } = candidate
+  const menuRef = useRef(null)
+
+  useEffect(() => {
+    function handleOutside(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) onClose()
+    }
+    document.addEventListener('mousedown', handleOutside)
+    return () => document.removeEventListener('mousedown', handleOutside)
+  }, [onClose])
+
+  return (
+    <div className={styles.menu} ref={menuRef}>
+      {!candidate.hasAssessment && (
+        <button
+          className={styles.menuItem}
+          onClick={(e) => {
+            e.stopPropagation()
+            onAddAssessment && onAddAssessment(id)
+            onClose()
+          }}
+        >
+          ✅ Mark Assessment Done
+        </button>
+      )}
+      <div className={styles.menuDivider} />
+      <p className={styles.menuLabel}>Move to Stage</p>
+      {STAGES.filter((s) => s !== stage).map((s) => (
+        <button
+          key={s}
+          className={styles.menuItem}
+          onClick={(e) => {
+            e.stopPropagation()
+            // No direct move from card menu — open card modal instead
+            onClose()
+          }}
+        >
+          → {s}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function CandidateCard({ candidate, onClick, onAddAssessment }) {
   const { name, appliedAt, score, isReferred, hasAssessment } = candidate
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <div className={styles.card} onClick={() => onClick && onClick(candidate)}>
@@ -54,23 +103,46 @@ function CandidateCard({ candidate, onClick }) {
           <p className={styles.name}>{name}</p>
           <p className={styles.date}>Applied at {formatDate(appliedAt)}</p>
         </div>
-        <button
-          className={styles.menuBtn}
-          onClick={(e) => e.stopPropagation()}
-          title="More options"
-        >
-          ···
-        </button>
+        <div className={styles.menuWrapper}>
+          <button
+            className={styles.menuBtn}
+            onClick={(e) => {
+              e.stopPropagation()
+              setMenuOpen((o) => !o)
+            }}
+            title="More options"
+          >
+            ···
+          </button>
+          {menuOpen && (
+            <CardMenu
+              candidate={candidate}
+              onClose={() => setMenuOpen(false)}
+              onAddAssessment={onAddAssessment}
+            />
+          )}
+        </div>
       </div>
 
       <div className={styles.cardFooter}>
         {score !== null && score !== undefined ? (
           <StarRating score={score} />
         ) : (
-          <button className={styles.addAssessment}>+ Add Assessment</button>
+          <button
+            className={styles.addAssessment}
+            onClick={(e) => {
+              e.stopPropagation()
+              onAddAssessment && onAddAssessment(candidate.id)
+            }}
+          >
+            + Add Assessment
+          </button>
         )}
         <div className={styles.badges}>
           {isReferred && <span className={styles.referredBadge}>↗ Referred</span>}
+          {hasAssessment && score === null && (
+            <span className={styles.assessmentBadge}>✅ Assessed</span>
+          )}
         </div>
       </div>
     </div>
@@ -78,3 +150,4 @@ function CandidateCard({ candidate, onClick }) {
 }
 
 export default CandidateCard
+

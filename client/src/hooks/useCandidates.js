@@ -44,5 +44,31 @@ export function useCandidates(params = {}) {
     }
   }, [])
 
-  return { candidates, loading, error, moveCandidate, deleteCandidate, refetch: fetchCandidates }
+  const createCandidate = useCallback(async (data) => {
+    const res = await candidatesApi.create(data)
+    setCandidates((prev) => [res.data, ...prev])
+    return res.data
+  }, [])
+
+  const addAssessment = useCallback(async (id) => {
+    try {
+      const res = await candidatesApi.update(id, { hasAssessment: true })
+      setCandidates((prev) =>
+        prev.map((c) => (c.id === id ? res.data : c))
+      )
+    } catch (err) {
+      setError(err.message)
+    }
+  }, [])
+
+  return {
+    candidates,
+    loading,
+    error,
+    moveCandidate,
+    deleteCandidate,
+    createCandidate,
+    addAssessment,
+    refetch: fetchCandidates,
+  }
 }

@@ -11,12 +11,17 @@ A full-stack recruitment pipeline application built for the ZeloraTech Software 
 ## Features
 
 - Kanban board view with four pipeline stages: **Applying Period → Screening → Interview → Test**
+- **Create candidates** via the "+ New Candidate" form with full field validation
 - Move candidates between stages via the candidate detail modal
+- **"Detail ›" column filter** — click to isolate a single stage across the board; click again to clear
+- **"+ Add Assessment"** button on unscored cards — one click marks assessment as done via API
+- **"···" card menu** — opens a quick-action dropdown (mark assessment done, view move-to-stage options)
+- **Empty-state** shown in columns when no candidates match the current filter
 - Search candidates by name, filter by score range, sort by applied date / name / score
-- Star rating display for scored candidates
-- Referred candidate badge
+- Star rating display (half-star precision) for scored candidates
+- Referred candidate badge (green), Assessment done badge (blue)
 - Responsive layout (mobile-friendly)
-- 20 pre-seeded candidates that match the UI design
+- 55 pre-seeded candidates matching the UI design (Applying: 27, Screening: 23, Interview: 3, Test: 2)
 
 ## Project Structure
 
