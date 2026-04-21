@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import JobHeader from '../components/JobHeader/JobHeader'
 import FilterBar from '../components/FilterBar/FilterBar'
+import KanbanBoard from '../components/KanbanBoard/KanbanBoard'
+import { useCandidates } from '../hooks/useCandidates'
 import styles from './RecruitmentPage.module.css'
 
 function RecruitmentPage() {
@@ -8,6 +10,25 @@ function RecruitmentPage() {
   const [search, setSearch] = useState('')
   const [scoreFilter, setScoreFilter] = useState('Any')
   const [sort, setSort] = useState('appliedAt')
+  const [selectedCandidate, setSelectedCandidate] = useState(null)
+
+  const { candidates, loading, error, moveCandidate } = useCandidates({ sort, order: 'desc' })
+
+  const filtered = useMemo(() => {
+    let list = candidates
+
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      list = list.filter((c) => c.name.toLowerCase().includes(q))
+    }
+
+    if (scoreFilter !== 'Any') {
+      const min = parseInt(scoreFilter, 10)
+      list = list.filter((c) => c.score !== null && c.score >= min)
+    }
+
+    return list
+  }, [candidates, search, scoreFilter])
 
   return (
     <div className={styles.page}>
@@ -18,8 +39,15 @@ function RecruitmentPage() {
         onSortChange={setSort}
       />
       <div className={styles.content}>
-        {/* KanbanBoard will be wired in Commit 11 */}
-        <p style={{ padding: 24, color: '#6b7280' }}>Kanban board — connecting to API next…</p>
+        {loading && <p className={styles.status}>Loading candidates…</p>}
+        {error && <p className={styles.statusError}>Error: {error}</p>}
+        {!loading && !error && (
+          <KanbanBoard
+            candidates={filtered}
+            onMoveCandidate={moveCandidate}
+            onCardClick={setSelectedCandidate}
+          />
+        )}
       </div>
     </div>
   )
