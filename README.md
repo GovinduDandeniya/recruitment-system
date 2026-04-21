@@ -4,18 +4,39 @@ A full-stack recruitment pipeline application built for the ZeloraTech Software 
 
 ## Tech Stack
 
-- **Frontend:** React (Vite) + CSS Modules
-- **Backend:** Node.js + Express
-- **Data:** In-memory store with JSON seed data
+- **Frontend:** React 19 (Vite) + CSS Modules (no Tailwind)
+- **Backend:** Node.js + Express 4
+- **Data:** In-memory store with JSON seed data (no database required)
+
+## Features
+
+- Kanban board view with four pipeline stages: **Applying Period → Screening → Interview → Test**
+- Move candidates between stages via the candidate detail modal
+- Search candidates by name, filter by score range, sort by applied date / name / score
+- Star rating display for scored candidates
+- Referred candidate badge
+- Responsive layout (mobile-friendly)
+- 20 pre-seeded candidates that match the UI design
 
 ## Project Structure
 
 ```
 recruitment-system/
-├── client/         # React frontend (Vite + React)
-├── server/         # Express REST API backend
+├── client/             # React frontend (Vite + CSS Modules)
+│   └── src/
+│       ├── components/ # Layout, TopNav, JobHeader, KanbanBoard, CandidateCard,
+│       │               # StageColumn, FilterBar, CandidateModal
+│       ├── hooks/      # useCandidates (data fetching + state)
+│       ├── pages/      # RecruitmentPage
+│       └── services/   # api.js (REST client)
+├── server/             # Express REST API backend
+│   └── src/
+│       ├── controllers/
+│       ├── data/       # In-memory candidates store + seed data
+│       ├── models/
+│       └── routes/
 ├── README.md
-└── package.json    # Root scripts to run both together
+└── package.json        # Root scripts to run both together
 ```
 
 ## Quick Start
@@ -23,13 +44,25 @@ recruitment-system/
 ### Prerequisites
 - Node.js >= 18
 
-### Install all dependencies
+### 1. Install all dependencies
 
 ```bash
 npm run install:all
 ```
 
-### Run both frontend and backend
+### 2. Configure environment (optional)
+
+```bash
+cp server/.env.example server/.env
+```
+
+Default values (`server/.env.example`):
+```
+PORT=5000
+CLIENT_ORIGIN=http://localhost:5173
+```
+
+### 3. Run both frontend and backend
 
 ```bash
 npm run dev
@@ -52,23 +85,48 @@ npm run dev:client
 
 | Method | Route | Description |
 |--------|-------|-------------|
-| GET | /api/candidates | List all candidates |
-| GET | /api/candidates/:id | Get single candidate |
-| POST | /api/candidates | Create candidate |
-| PUT | /api/candidates/:id | Update candidate |
-| DELETE | /api/candidates/:id | Delete candidate |
-| PATCH | /api/candidates/:id/stage | Move candidate to new stage |
-| GET | /api/candidates?stage=Screening | Filter by stage |
-| GET | /api/candidates?page=1&limit=10 | Paginate results |
+| GET | `/api/candidates` | List all candidates (supports filters below) |
+| GET | `/api/candidates/:id` | Get a single candidate |
+| POST | `/api/candidates` | Create a new candidate |
+| PUT | `/api/candidates/:id` | Update candidate fields |
+| DELETE | `/api/candidates/:id` | Delete a candidate |
+| PATCH | `/api/candidates/:id/stage` | Move candidate to a new stage |
+
+### Query Parameters for `GET /api/candidates`
+
+| Parameter | Values | Description |
+|-----------|--------|-------------|
+| `stage` | `Applying Period`, `Screening`, `Interview`, `Test` | Filter by stage |
+| `sort` | `name`, `appliedAt`, `score` | Sort field |
+| `order` | `asc`, `desc` | Sort direction |
+| `page` | number | Page number (default: 1) |
+| `limit` | number (max 100) | Results per page (default: 20) |
+
+### Candidate Object Shape
+
+```json
+{
+  "id": "uuid",
+  "name": "Jane Anderson",
+  "stage": "Screening",
+  "appliedAt": "2024-01-15T00:00:00.000Z",
+  "score": 4,
+  "isReferred": false,
+  "hasAssessment": true
+}
+```
 
 ## Assumptions & Decisions
 
-- In-memory data store used — data resets on server restart (no database required to run)
-- Stage order is fixed: Applying Period → Screening → Interview → Test
-- Scores are rated 1–5 (displayed as stars in the UI)
-- Candidate avatars use initials-based fallback when no photo is provided
-- CORS is enabled for local development (frontend on :5173, backend on :5000)
+- **No database** — in-memory array resets on server restart; no setup beyond `npm install` required
+- **Stage order is fixed:** Applying Period → Screening → Interview → Test
+- **Scores are rated 1–5** displayed as half-star ratings in the UI
+- **Avatar initials fallback** — colour derived from candidate name, no image uploads
+- **CORS** configured for `http://localhost:5173` by default (override via `CLIENT_ORIGIN` env var)
+- **Vite proxy** — all `/api` requests from the frontend are proxied to `:5000` in development
+- **CSS Modules** used throughout; zero Tailwind dependencies
 
 ## Author
 
 Built as part of the ZeloraTech Software Engineer Intern technical assessment.
+
