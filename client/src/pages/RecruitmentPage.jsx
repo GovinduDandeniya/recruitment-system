@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import JobHeader from '../components/JobHeader/JobHeader'
 import FilterBar from '../components/FilterBar/FilterBar'
 import KanbanBoard from '../components/KanbanBoard/KanbanBoard'
+import CandidateModal from '../components/CandidateModal/CandidateModal'
 import { useCandidates } from '../hooks/useCandidates'
 import styles from './RecruitmentPage.module.css'
 
@@ -12,7 +13,7 @@ function RecruitmentPage() {
   const [sort, setSort] = useState('appliedAt')
   const [selectedCandidate, setSelectedCandidate] = useState(null)
 
-  const { candidates, loading, error, moveCandidate } = useCandidates({ sort, order: 'desc' })
+  const { candidates, loading, error, moveCandidate, deleteCandidate } = useCandidates({ sort, order: 'desc' })
 
   const filtered = useMemo(() => {
     let list = candidates
@@ -49,6 +50,21 @@ function RecruitmentPage() {
           />
         )}
       </div>
+
+      {selectedCandidate && (
+        <CandidateModal
+          candidate={selectedCandidate}
+          onClose={() => setSelectedCandidate(null)}
+          onMoveStage={(id, stage) => {
+            moveCandidate(id, stage)
+            setSelectedCandidate(null)
+          }}
+          onDelete={(id) => {
+            deleteCandidate(id)
+            setSelectedCandidate(null)
+          }}
+        />
+      )}
     </div>
   )
 }
